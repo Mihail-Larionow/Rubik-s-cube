@@ -2,54 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeManager : MonoBehaviour
+public class Cube : MonoBehaviour
 {
 
-    public GameObject CubePiecePref;
-    Transform CubeTransf;
-    List<GameObject> AllCubePieces = new List<GameObject>();
-    GameObject CubeCenterPiece;
+    public GameObject cubePiecePref;
+    Transform cubeTransf;
+    List<GameObject> allCubePieces = new List<GameObject>();
+    GameObject cubeCenterPiece;
     bool isRotating = false;
     List<GameObject> frontCubes
     {
         get
         {
-            return AllCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.x) == 0);
+            return allCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.x) == 1);
         }
     }
     List<GameObject> backCubes
     {
         get
         {
-            return AllCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.x) == -2);
+            return allCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.x) == -1);
         }
     }
     List<GameObject> topCubes
     {
         get
         {
-            return AllCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.y) == 0);
+            return allCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.y) == 1);
         }
     }
     List<GameObject> bottomCubes
     {
         get
         {
-            return AllCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.y) == -2);
+            return allCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.y) == -1);
         }
     }
     List<GameObject> leftCubes
     {
         get
         {
-            return AllCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.z) == 0);
+            return allCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.z) == -1);
         }
     }
     List<GameObject> rightCubes
     {
         get
         {
-            return AllCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.z) == 2);
+            return allCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.z) == 1);
         }
     }
 
@@ -61,21 +61,22 @@ public class CubeManager : MonoBehaviour
 
     void Update()
     {
-        CheckInput();
+        if(!isRotating)
+            CheckInput();
     }
 
     void CreateCube()
     {
-        for (int x = 0; x < 3; x++)
-            for (int y = 0; y < 3; y++)
-                for (int z = 0; z < 3; z++)
+        for (int x = -1; x < 2; x++)
+            for (int y = -1; y < 2; y++)
+                for (int z = -1; z < 2; z++)
                 {
-                    GameObject go = Instantiate(CubePiecePref, CubeTransf, false);
+                    GameObject go = Instantiate(cubePiecePref, cubeTransf, false);
                     go.transform.localPosition = new Vector3(-x, -y, z);
-                    go.GetComponent<CubePieceManager>().SetColor(-x, -y, z);
-                    AllCubePieces.Add(go);
+                    go.GetComponent<CubePiece>().SetColor(-x, -y, z);
+                    allCubePieces.Add(go);
                 }
-        CubeCenterPiece = AllCubePieces[13];
+        cubeCenterPiece = allCubePieces[13];
     }
 
     void CheckInput()
@@ -101,7 +102,7 @@ public class CubeManager : MonoBehaviour
         while (angle < 90)
         {
             foreach (GameObject go in pieces)
-                go.transform.RotateAround(CubeCenterPiece.transform.position, rotation, 5);
+                go.transform.RotateAround(cubeCenterPiece.transform.position, rotation, 5);
             angle += 5;
             yield return null;
         }
