@@ -116,12 +116,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d5ecd87bf1139e469f5ae74e71d2e32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  topPanel: {fileID: 4874779450024231146}
-  bottomPanel: {fileID: 5102180353158530541}
-  frontPanel: {fileID: 4813872463131547465}
-  backPanel: {fileID: 7730283053442197075}
-  rightPanel: {fileID: 6862914035478424961}
-  leftPanel: {fileID: 8501366712300475205}
+  panels:
+  - {fileID: 4813872463131547465}
+  - {fileID: 7730283053442197075}
+  - {fileID: 4874779450024231146}
+  - {fileID: 5102180353158530541}
+  - {fileID: 8501366712300475205}
+  - {fileID: 6862914035478424961}
 --- !u!1 &4813872463131547465
 GameObject:
   m_ObjectHideFlags: 0
