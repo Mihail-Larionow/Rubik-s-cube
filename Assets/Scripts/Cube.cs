@@ -7,9 +7,9 @@ public class Cube : MonoBehaviour
 
     public GameObject cubePiecePref;
     private Transform cubeTransf;
-    private List<GameObject> allCubePieces;
-    private GameObject cubeCenterPiece;
     private bool isRotating = false;
+    private GameObject cubeCenterPiece;
+    private List<GameObject> allCubePieces;
     private List<GameObject> frontCubes
     {
         get
@@ -193,7 +193,7 @@ public class Cube : MonoBehaviour
         return sign;
     }
 
-    private IEnumerator Rotate(List<GameObject> pieces, Vector3 rotation, int speed = 2)
+    private IEnumerator Rotate(List<GameObject> pieces, Vector3 rotation, int speed = 30)
     {
         int angle = 0;
         isRotating = true;
