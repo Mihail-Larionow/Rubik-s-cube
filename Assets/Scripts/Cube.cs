@@ -6,8 +6,10 @@ public class Cube : MonoBehaviour
 {
 
     public GameObject cubePiecePref;
+    public bool isRotating = false; 
+    public bool isShuffling = false;
+    public bool isComplete = true;
     private Transform cubeTransf;
-    public bool isRotating = false, isShuffling = false, isComplete = true;
     private GameObject cubeCenterPiece;
     private List<GameObject> allCubePieces;
     private List<GameObject> frontCubes
@@ -126,11 +128,17 @@ public class Cube : MonoBehaviour
     private void Start()
     {
         allCubePieces = new List<GameObject>();
+        cubeTransf = transform;
         CreateCube();
     }
 
     private void CreateCube()
     {
+        foreach(GameObject go in allCubePieces){
+            DestroyImmediate(go);
+        }
+        allCubePieces.Clear();
+        
         for (int x = -1; x < 2; x++)
             for (int y = -1; y < 2; y++)
                 for (int z = -1; z < 2; z++)

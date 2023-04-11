@@ -91,7 +91,7 @@ public class Game : MonoBehaviour
             }
             second++;
             if(hour == 0) textView.text = minute.ToString("D2") + ":" + second.ToString("D2");
-            else textView.text = hour.ToString("D2") + ":" + minute.ToString("D2") + ":" + second.ToString("D2");
+            else textView.text = hour.ToString() + ":" + minute.ToString("D2") + ":" + second.ToString("D2");
             yield return new WaitForSeconds(1);
         }
     }
