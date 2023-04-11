@@ -67,5 +67,5 @@ public class Game : MonoBehaviour
         }
         isRotating = false;
     }
-    
+
 }

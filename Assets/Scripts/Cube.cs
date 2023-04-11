@@ -7,7 +7,7 @@ public class Cube : MonoBehaviour
 
     public GameObject cubePiecePref;
     private Transform cubeTransf;
-    private bool isRotating = false;
+    private bool isRotating = false, isShuffling = false;
     private GameObject cubeCenterPiece;
     private List<GameObject> allCubePieces;
     private List<GameObject> frontCubes
@@ -70,6 +70,12 @@ public class Cube : MonoBehaviour
             return allCubePieces.FindAll(x => Mathf.Round(x.transform.localPosition.y) == 0);
         }
     }
+    private Vector3[] RotationVectors = {
+        new Vector3(1, 0, 0), new Vector3(-1, 0, 0), new Vector3(1, 0, 0),
+        new Vector3(0, 1, 0), new Vector3(0, -1, 0), new Vector3(0, 1, 0),
+        new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 0, 1)
+    };
+
 
     public void DetectRotate(List<GameObject> cubes, List<GameObject> panels)
     {
@@ -92,6 +98,11 @@ public class Cube : MonoBehaviour
             StartCoroutine(Rotate(leftCubes, new Vector3(0,0,1 * DetectLRSign(cubes))));
         else if(DetectSide(panels, new Vector3(1,0,0), new Vector3(0,1,0), rightCubes))
             StartCoroutine(Rotate(rightCubes, new Vector3(0,0,1 * DetectLRSign(cubes))));
+    }
+
+
+    public void ShuffleButtonClick(){
+        if(!isShuffling) StartCoroutine(Shuffle());
     }
 
     private void Start()
@@ -191,6 +202,29 @@ public class Cube : MonoBehaviour
                 sign = Mathf.Round(cubes[0].transform.position.x) - Mathf.Round(cubes[1].transform.position.x);
         }
         return sign;
+    }
+
+    private IEnumerator Shuffle(){
+        isShuffling = true;
+        for(int i=0; i<Random.Range(15,40); i++){
+            int edge = Random.Range(0, 9);
+            List<GameObject> edgeCubes = new List<GameObject>();
+            switch (edge)
+            {
+                case 0: edgeCubes = frontCubes; break;
+                case 1: edgeCubes = backCubes; break;
+                case 2: edgeCubes = upHorizontalCubes; break;
+                case 3: edgeCubes = topCubes; break;
+                case 4: edgeCubes = bottomCubes; break;
+                case 5: edgeCubes = frontHorizontalCubes; break;
+                case 6: edgeCubes = rightCubes; break;
+                case 7: edgeCubes = leftCubes; break;
+                case 8: edgeCubes = upVerticalCubes; break;
+            }
+            StartCoroutine(Rotate(edgeCubes, RotationVectors[edge], 90));
+            yield return new WaitForSeconds(.3f);
+        }
+        isShuffling = false;
     }
 
     private IEnumerator Rotate(List<GameObject> pieces, Vector3 rotation, int speed = 30)
