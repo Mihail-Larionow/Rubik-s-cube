@@ -7,6 +7,7 @@ public class Cube : MonoBehaviour
 
     public bool isComplete = true;
     public bool isRotating = false; 
+    public bool isDisabled = false;
     public bool isShuffling = false;
     public GameObject cubePiecePref;
     private Transform cubeTransf;
@@ -125,14 +126,7 @@ public class Cube : MonoBehaviour
         isShuffling = false;
     }
 
-    private void Start()
-    {
-        allCubePieces = new List<GameObject>();
-        cubeTransf = transform;
-        CreateCube();
-    }
-
-    private void CreateCube()
+    public void CreateCube()
     {
         foreach(GameObject cube in allCubePieces){
             DestroyImmediate(cube);
@@ -149,6 +143,13 @@ public class Cube : MonoBehaviour
                     allCubePieces.Add(cube);
                 }
         cubeCenterPiece = allCubePieces[13];
+    }
+
+    private void Start()
+    {
+        allCubePieces = new List<GameObject>();
+        cubeTransf = transform;
+        CreateCube();
     }
 
     private bool DetectSide(List<GameObject> panels, Vector3 fDirection, Vector3 sDirection, List<GameObject> side)

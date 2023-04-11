@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class Game : MonoBehaviour
 {
@@ -9,18 +10,18 @@ public class Game : MonoBehaviour
     public Cube cube;
     public Text textView;
     public MainCamera mainCamera;
-    private Transform cubePosition;
+    public GameObject leftButton;
+    public GameObject rightButton;
     private List<GameObject> cubes;
     private List<GameObject> panels;
-    private bool cubeIsRotating = false;
     private bool watchIsWorking = false;
 
     public void RightButtonClick(){
-        if(!mainCamera.isRotating) StartCoroutine(mainCamera.CameraRotate(cubePosition, new Vector3(0,1,0)));
+        if(!mainCamera.isRotating) StartCoroutine(mainCamera.CameraRotate(cube.transform, new Vector3(0,1,0)));
     }
 
     public void LeftButtonClick(){
-        if(!mainCamera.isRotating) StartCoroutine(mainCamera.CameraRotate(cubePosition, new Vector3(0,-1,0)));
+        if(!mainCamera.isRotating) StartCoroutine(mainCamera.CameraRotate(cube.transform, new Vector3(0,-1,0)));
     }
 
     public void ShuffleButtonClick(){
@@ -38,21 +39,26 @@ public class Game : MonoBehaviour
         }
     }
 
+    public void TextViewClick(){
+        if(!watchIsWorking) cube.CreateCube();
+    }
+
     private void Start()
     {
-        cubePosition = cube.transform;
         cubes = new List<GameObject>();
         panels = new List<GameObject>();
     }
 
     private void LateUpdate()
     {
-        if(Input.GetMouseButton(0)){
-            if(!cubeIsRotating){
+        if(Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject()){
+            if(!cube.isDisabled){
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
                 if(Physics.Raycast(ray, out hit, 100)){
+                    mainCamera.isDisabled = true;
+
                     if(cubes.Count < 2 && 
                     !cubes.Exists(x => x == hit.collider.transform.parent.gameObject) &&
                     hit.transform.parent.gameObject != cube.gameObject){
@@ -61,15 +67,24 @@ public class Game : MonoBehaviour
                     }
                     else if(cubes.Count == 2){
                         cube.DetectRotate(cubes, panels);
-                        cubeIsRotating = true;
+                        cube.isDisabled = true;
                     }
                 }
+            }
+
+            if(!mainCamera.isDisabled){
+                cube.isDisabled = true;
+                leftButton.SetActive(false);
+                rightButton.SetActive(false);
             }
         }
         else if(Input.GetMouseButtonUp(0)){
             cubes.Clear();
             panels.Clear();
-            cubeIsRotating = false;
+            mainCamera.isDisabled = false;
+            cube.isDisabled = false;
+            leftButton.SetActive(true);
+            rightButton.SetActive(true);
         }
     }
 
