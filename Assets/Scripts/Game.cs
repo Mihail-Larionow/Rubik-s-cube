@@ -73,24 +73,26 @@ public class Game : MonoBehaviour
     }
 
     private IEnumerator TimeFlow(){
-        int milliSecond = -1;
-        int second = 0;
+        int second = -1;
+        int minute = 0;
+        int hour = 0;
         while(true){
             if(cube.isComplete){
                 watchIsWorking = false;
                 yield break;
             }
-            if(milliSecond == 99){
-                if(second == 59){
-                    watchIsWorking = false;
-                    yield break;
+            if(second == 59){
+                if(minute == 59){
+                    hour++;
+                    minute = -1;
                 }
-                second++;
-                milliSecond = -1;
+                minute++;
+                second = -1;
             }
-            milliSecond++;
-            textView.text = second.ToString("D2") + ":" + milliSecond.ToString("D2");
-            yield return new WaitForSeconds(0.01f);
+            second++;
+            if(hour == 0) textView.text = minute.ToString("D2") + ":" + second.ToString("D2");
+            else textView.text = hour.ToString("D2") + ":" + minute.ToString("D2") + ":" + second.ToString("D2");
+            yield return new WaitForSeconds(1);
         }
     }
 
