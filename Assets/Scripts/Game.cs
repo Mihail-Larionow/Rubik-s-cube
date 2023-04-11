@@ -1,26 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Game : MonoBehaviour
 {
 
     public Cube cube;
     public Text textView;
-    public Transform cubePosition;
+    public MainCamera mainCamera;
+    private Transform cubePosition;
     private List<GameObject> cubes;
     private List<GameObject> panels;
-    private bool isRotating = false;
     private bool cubeIsRotating = false;
     private bool watchIsWorking = false;
 
     public void RightButtonClick(){
-        if(!isRotating) StartCoroutine(CameraRotate(new Vector3(0,1,0)));
+        if(!mainCamera.isRotating) StartCoroutine(mainCamera.CameraRotate(cubePosition, new Vector3(0,1,0)));
     }
 
     public void LeftButtonClick(){
-        if(!isRotating) StartCoroutine(CameraRotate(new Vector3(0,-1,0)));
+        if(!mainCamera.isRotating) StartCoroutine(mainCamera.CameraRotate(cubePosition, new Vector3(0,-1,0)));
     }
 
     public void ShuffleButtonClick(){
@@ -40,6 +40,7 @@ public class Game : MonoBehaviour
 
     private void Start()
     {
+        cubePosition = cube.transform;
         cubes = new List<GameObject>();
         panels = new List<GameObject>();
     }
@@ -73,39 +74,33 @@ public class Game : MonoBehaviour
     }
 
     private IEnumerator TimeFlow(){
-        int second = -1;
-        int minute = 0;
-        int hour = 0;
+        int seconds = -1;
+        int minutes = 0;
+        int hours = 0;
+        textView.color = Color.white;
         while(true){
             if(cube.isComplete){
                 watchIsWorking = false;
                 yield break;
             }
-            if(second == 59){
-                if(minute == 59){
-                    hour++;
-                    minute = -1;
-                }
-                minute++;
-                second = -1;
+            if(hours == 24){
+                textView.text = "SLOW";
+                textView.color = Color.red;
+                yield break;
             }
-            second++;
-            if(hour == 0) textView.text = minute.ToString("D2") + ":" + second.ToString("D2");
-            else textView.text = hour.ToString() + ":" + minute.ToString("D2") + ":" + second.ToString("D2");
+            if(seconds == 59){
+                if(minutes == 59){
+                    hours++;
+                    minutes = -1;
+                }
+                minutes++;
+                seconds = -1;
+            }
+            seconds++;
+            if(hours == 0) textView.text = minutes.ToString("D2") + ":" + seconds.ToString("D2");
+            else textView.text = hours.ToString() + ":" + minutes.ToString("D2") + ":" + seconds.ToString("D2");
             yield return new WaitForSeconds(1);
         }
-    }
-
-    private IEnumerator CameraRotate(Vector3 rotation, int speed = 30)
-    {
-        isRotating = true;
-        int angle = 0;
-        while(angle < 90){
-            transform.RotateAround(cubePosition.position, rotation, speed);
-            angle += speed;
-            yield return null;
-        }
-        isRotating = false;
     }
 
 }

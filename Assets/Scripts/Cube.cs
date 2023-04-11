@@ -1,14 +1,14 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
 
-    public GameObject cubePiecePref;
+    public bool isComplete = true;
     public bool isRotating = false; 
     public bool isShuffling = false;
-    public bool isComplete = true;
+    public GameObject cubePiecePref;
     private Transform cubeTransf;
     private GameObject cubeCenterPiece;
     private List<GameObject> allCubePieces;
@@ -134,19 +134,19 @@ public class Cube : MonoBehaviour
 
     private void CreateCube()
     {
-        foreach(GameObject go in allCubePieces){
-            DestroyImmediate(go);
+        foreach(GameObject cube in allCubePieces){
+            DestroyImmediate(cube);
         }
         allCubePieces.Clear();
-        
+
         for (int x = -1; x < 2; x++)
             for (int y = -1; y < 2; y++)
                 for (int z = -1; z < 2; z++)
                 {
-                    GameObject go = Instantiate(cubePiecePref, cubeTransf, false);
-                    go.transform.localPosition = new Vector3(-x, -y, z);
-                    go.GetComponent<CubePiece>().SetColor(-x, -y, z);
-                    allCubePieces.Add(go);
+                    GameObject cube = Instantiate(cubePiecePref, cubeTransf, false);
+                    cube.transform.localPosition = new Vector3(-x, -y, z);
+                    cube.GetComponent<CubePiece>().SetColor(-x, -y, z);
+                    allCubePieces.Add(cube);
                 }
         cubeCenterPiece = allCubePieces[13];
     }
@@ -256,8 +256,8 @@ public class Cube : MonoBehaviour
         isRotating = true;
         while (angle < 90)
         {
-            foreach (GameObject go in pieces)
-                go.transform.RotateAround(cubeCenterPiece.transform.position, rotation, speed);
+            foreach (GameObject piece in pieces)
+                piece.transform.RotateAround(cubeCenterPiece.transform.position, rotation, speed);
             angle += speed;
             yield return null;
         }

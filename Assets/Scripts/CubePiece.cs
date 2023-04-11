@@ -1,9 +1,10 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class CubePiece : MonoBehaviour
 {
+
     public List<GameObject> panels;
 
     public void SetColor(int x, int y, int z)
