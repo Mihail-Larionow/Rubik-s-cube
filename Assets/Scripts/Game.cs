@@ -10,19 +10,9 @@ public class Game : MonoBehaviour
     public Cube cube;
     public Text textView;
     public MainCamera mainCamera;
-    public GameObject leftButton;
-    public GameObject rightButton;
     private List<GameObject> cubes;
     private List<GameObject> panels;
     private bool watchIsWorking = false;
-
-    public void RightButtonClick(){
-        if(!mainCamera.isRotating) StartCoroutine(mainCamera.CameraRotate(cube.transform, new Vector3(0,1,0)));
-    }
-
-    public void LeftButtonClick(){
-        if(!mainCamera.isRotating) StartCoroutine(mainCamera.CameraRotate(cube.transform, new Vector3(0,-1,0)));
-    }
 
     public void ShuffleButtonClick(){
         if(!cube.isShuffling) StartCoroutine(cube.Shuffle());
@@ -74,8 +64,6 @@ public class Game : MonoBehaviour
 
             if(!mainCamera.isDisabled){
                 cube.isDisabled = true;
-                leftButton.SetActive(false);
-                rightButton.SetActive(false);
             }
         }
         else if(Input.GetMouseButtonUp(0)){
@@ -83,8 +71,6 @@ public class Game : MonoBehaviour
             panels.Clear();
             mainCamera.isDisabled = false;
             cube.isDisabled = false;
-            leftButton.SetActive(true);
-            rightButton.SetActive(true);
         }
     }
 
