@@ -15,11 +15,11 @@ public class MainCamera : MonoBehaviour
     private void LateUpdate(){
         if(Input.GetMouseButton(0)){
             if(!isDisabled){
-                localRotation.x += Input.GetAxis("Mouse X") * 10;
-                localRotation.y += Input.GetAxis("Mouse Y") * -10;
+                localRotation.x += Input.GetAxis("Mouse X") * 5;
+                localRotation.y += Input.GetAxis("Mouse Y") * -5;
                 localRotation.y = Mathf.Clamp(localRotation.y, -90, 90);
                 Quaternion quaternion = Quaternion.Euler(localRotation.y, localRotation.x, 0);
-                transform.parent.rotation = Quaternion.Lerp(transform.parent.rotation, quaternion, Time.deltaTime * 15);
+                transform.parent.rotation = Quaternion.Lerp(transform.parent.rotation, quaternion, Time.deltaTime * 5);
             }   
         }
         else if(Input.GetMouseButtonUp(0)){
@@ -35,7 +35,7 @@ public class MainCamera : MonoBehaviour
     public void StabilizeCamera(){
         localRotation.x = (int)(localRotation.x / 45) * 45;
         Quaternion quaternion = Quaternion.Euler(30, localRotation.x, 0);
-        transform.parent.rotation = Quaternion.Lerp(transform.parent.rotation, quaternion, Time.deltaTime * 1);
+        transform.parent.rotation = Quaternion.Lerp(transform.parent.rotation, quaternion, Time.deltaTime * 5);
     }
 
 }
