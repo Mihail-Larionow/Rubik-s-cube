@@ -82,7 +82,7 @@ public class Cube : MonoBehaviour
 
     public void DetectRotate(List<GameObject> cubes, List<GameObject> panels)
     {
-        if(isRotating) return;
+        if(isRotating || isDisabled) return;
         if(upVerticalCubes.Exists(x => x == cubes[0]) && upVerticalCubes.Exists(x => x == cubes[1]))
             StartCoroutine(Rotate(upVerticalCubes, new Vector3(0,0,1 * DetectLRSign(cubes))));
         else if(upHorizontalCubes.Exists(x => x == cubes[0]) && upHorizontalCubes.Exists(x => x == cubes[1]))
@@ -101,6 +101,29 @@ public class Cube : MonoBehaviour
             StartCoroutine(Rotate(leftCubes, new Vector3(0,0,1 * DetectLRSign(cubes))));
         else if(DetectSide(panels, new Vector3(1,0,0), new Vector3(0,1,0), rightCubes))
             StartCoroutine(Rotate(rightCubes, new Vector3(0,0,1 * DetectLRSign(cubes))));
+    }
+
+    public void CreateCube()
+    {
+        foreach(GameObject cube in allCubePieces){
+            DestroyImmediate(cube);
+        }
+        allCubePieces.Clear();
+
+        for (int x = -1; x < 2; x++)
+            for (int y = -1; y < 2; y++)
+                for (int z = -1; z < 2; z++)
+                {
+                    GameObject cube = Instantiate(cubePiecePref, cubeTransf, false);
+                    cube.transform.localPosition = new Vector3(-x, -y, z);
+                    cube.GetComponent<CubePiece>().SetColor(-x, -y, z);
+                    allCubePieces.Add(cube);
+                }
+        cubeCenterPiece = allCubePieces[13];
+    }
+
+    public void StartShuffle(){
+        StartCoroutine(Shuffle());
     }
 
     public IEnumerator Shuffle(){
@@ -124,25 +147,6 @@ public class Cube : MonoBehaviour
             yield return new WaitForSeconds(.3f);
         }
         isShuffling = false;
-    }
-
-    public void CreateCube()
-    {
-        foreach(GameObject cube in allCubePieces){
-            DestroyImmediate(cube);
-        }
-        allCubePieces.Clear();
-
-        for (int x = -1; x < 2; x++)
-            for (int y = -1; y < 2; y++)
-                for (int z = -1; z < 2; z++)
-                {
-                    GameObject cube = Instantiate(cubePiecePref, cubeTransf, false);
-                    cube.transform.localPosition = new Vector3(-x, -y, z);
-                    cube.GetComponent<CubePiece>().SetColor(-x, -y, z);
-                    allCubePieces.Add(cube);
-                }
-        cubeCenterPiece = allCubePieces[13];
     }
 
     private void Start()

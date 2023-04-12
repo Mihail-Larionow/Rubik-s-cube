@@ -1,36 +1,32 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class Game : MonoBehaviour
 {
 
     public Cube cube;
-    public Text textView;
     public MainCamera mainCamera;
+    public StopWatch stopWatch;
     private List<GameObject> cubes;
     private List<GameObject> panels;
-    private bool watchIsWorking = false;
 
     public void ShuffleButtonClick(){
-        if(!cube.isShuffling) StartCoroutine(cube.Shuffle());
+        if(!cube.isShuffling && !stopWatch.isWorking) cube.StartShuffle();
     }
 
     public void StopWatchButtonClick(){
-        if(watchIsWorking) {
-            watchIsWorking = false;
-            StopAllCoroutines();
+        if(!stopWatch.isWorking && !cube.isShuffling) {
+            stopWatch.StartTimeFlow(cube);
         }
-        else{ 
-            watchIsWorking = true;
-            StartCoroutine(TimeFlow());
+        else if(stopWatch.isWorking){ 
+            stopWatch.StopTimeFlow();
         }
     }
 
     public void TextViewClick(){
-        if(!watchIsWorking) cube.CreateCube();
+        if(!stopWatch.isWorking) cube.CreateCube();
     }
 
     private void Start()
@@ -41,6 +37,7 @@ public class Game : MonoBehaviour
 
     private void LateUpdate()
     {
+        if(stopWatch.downCounting) cube.isDisabled = true;
         if(Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject()){
             if(!cube.isDisabled){
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -74,34 +71,6 @@ public class Game : MonoBehaviour
         }
     }
 
-    private IEnumerator TimeFlow(){
-        int seconds = -1;
-        int minutes = 0;
-        int hours = 0;
-        textView.color = Color.white;
-        while(true){
-            if(cube.isComplete){
-                watchIsWorking = false;
-                yield break;
-            }
-            if(hours == 24){
-                textView.text = "SLOW";
-                textView.color = Color.red;
-                yield break;
-            }
-            if(seconds == 59){
-                if(minutes == 59){
-                    hours++;
-                    minutes = -1;
-                }
-                minutes++;
-                seconds = -1;
-            }
-            seconds++;
-            if(hours == 0) textView.text = minutes.ToString("D2") + ":" + seconds.ToString("D2");
-            else textView.text = hours.ToString() + ":" + minutes.ToString("D2") + ":" + seconds.ToString("D2");
-            yield return new WaitForSeconds(1);
-        }
-    }
+    
 
 }

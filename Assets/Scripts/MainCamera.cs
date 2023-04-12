@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 public class MainCamera : MonoBehaviour
@@ -13,7 +14,7 @@ public class MainCamera : MonoBehaviour
     }
 
     private void LateUpdate(){
-        if(Input.GetMouseButton(0)){
+        if(Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject()){
             if(!isDisabled){
                 localRotation.x += Input.GetAxis("Mouse X") * 5;
                 localRotation.y += Input.GetAxis("Mouse Y") * -5;
@@ -25,7 +26,6 @@ public class MainCamera : MonoBehaviour
         else if(Input.GetMouseButtonUp(0)){
             localRotation.x = (int)(localRotation.x / 45) * 45;
             localRotation.y = 30;
-            Debug.Log(localRotation.x + " " + localRotation.y);
         }
         else{
             StabilizeCamera();
