@@ -1,5 +1,5 @@
 # Rubik-s-cube
-<img src="https://img.shields.io/badge/stage-pre%20release-green.svg" alt="stage"> 
+<img src="https://img.shields.io/badge/stage-released-lime.svg" alt="stage"> 
 
 _Classic 3D Rubik's Cube, which we all know very well._
 
